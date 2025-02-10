@@ -1,13 +1,16 @@
 // src/routes/auth.ts
 import { Router, Request } from 'express';
-import { login } from '../controllers/authController';
+import { register, login } from '../controllers/authController';
 import verifyToken from '../middlewares/auth';
+// import { register } from '../controllers/authController';
 
 interface AuthRequest extends Request {
   user?: any;
 }
 
 const router: Router = Router();
+// register route
+router.post('/register', register);
 
 // Login route
 router.post('/login', login);

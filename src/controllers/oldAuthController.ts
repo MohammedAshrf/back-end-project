@@ -1,7 +1,7 @@
-import { Request, RequestHandler, Response } from 'express';
-import User from '../models/User.Model';
-import bcrypt from 'bcryptjs';
+// src/controllers/authController.ts
+import { Request, Response, RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 // Example user data (replace with your actual user lookup logic)
 const user = {
@@ -10,31 +10,6 @@ const user = {
   // This is an example hashed password; in practice, this should come from your DB.
   //   password: '$2a$10$XXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
   password: 'yourPassword',
-};
-
-export const register = async (req: Request, res: Response) => {
-  try {
-    const { username, email, password } = req.body;
-
-    // Check if user exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      res.status(400).json({ message: 'User already exists' });
-      return;
-    }
-
-    // Hash Password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Create a new user and Save it to DB
-    const newUser = new User({ username, email, password: hashedPassword });
-    await newUser.save();
-
-    res.status(201).json({ message: 'User registered successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
-  }
 };
 
 export const login: RequestHandler = async (
