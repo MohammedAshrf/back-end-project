@@ -78,7 +78,7 @@ export const checkIfAdmin = catchError(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     //@ts-ignore
     const { user } = req;
-    console.log(user);
+    // console.log(user);
     if (user.role !== 'admin')
       return next(new AppError('You are not an admin', 403));
     else next();
@@ -159,7 +159,7 @@ export const refresh = catchError(
         if (err) return next(new AppError('Refresh token is not valid', 403));
         console.log(decoded);
         const existingUser: IUser | null = await User.findById(decoded.id);
-        console.log(existingUser);
+        // console.log(existingUser);
         if (!existingUser)
           return next(new AppError('Refresh token is not valid', 403));
 

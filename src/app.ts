@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from 'express';
-import authRoutes from './routes/auth';
+import { authRoutes } from './routes/auth';
 import dotenv from 'dotenv';
+import { postRoutes } from './routes/post';
 
 dotenv.config();
 
@@ -14,7 +15,10 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to the API!');
 });
 
-// Use authentication routes
-app.use('/api/auth', authRoutes);
+// Authentication routes
+app.use('/auth', authRoutes);
+
+// Authentication routes
+app.use('/posts', postRoutes);
 
 export default app;

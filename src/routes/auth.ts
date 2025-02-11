@@ -7,6 +7,7 @@ interface AuthRequest extends Request {
 }
 
 const router: Router = Router();
+
 // register route
 router.post('/register', register);
 
@@ -21,4 +22,4 @@ router.get('/protected', verifyToken, (req: AuthRequest, res) => {
 // Delete user route (protected)
 router.delete('/delete/:id', verifyToken, deleteUser);
 
-export default router;
+export const authRoutes = router;
