@@ -1,7 +1,7 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction, CookieOptions } from 'express';
 import AppError from '../utils/AppError';
-import { IUser, User } from '../models/User.Model';
+import { IUser, User } from '../models/User.model';
 import { catchError } from '../utils/catchError';
 
 const JWT_EXPIRES = '10m'; // Short-lived tokens, because who likes long waits? 😜
@@ -72,6 +72,8 @@ export const login = catchError(
     sendResponse(res, user, 200);
   },
 );
+
+// Check Admin
 export const checkIfAdmin = catchError(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     //@ts-ignore
@@ -82,11 +84,14 @@ export const checkIfAdmin = catchError(
     else next();
   },
 );
-// Protect middleware
+
 interface IDecoded {
   id: string;
   iat: number;
 }
+
+// Protection Middleware
+// (Check for refresh token expirattion and password change)
 export const protect = catchError(
   async (
     req: Request extends { user: IUser } ? Request & { user: IUser } : Request,
@@ -188,5 +193,20 @@ export const logout = catchError(
 
     res.clearCookie('jwt', cookieOptions);
     return res.status(200).json({ status: 'success' });
+  },
+);
+
+// Delete handler
+export const deleteUser = catchError(
+  async (req: Request, res: Response): Promise<any> => {
+    const userId = req.params.id; // Get user ID from request parameters
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+
+    res.json({ message: 'User deleted successfully' });
   },
 );

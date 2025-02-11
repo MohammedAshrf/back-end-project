@@ -1,4 +1,3 @@
-// src/app.ts
 import express, { Application, Request, Response } from 'express';
 import authRoutes from './routes/auth';
 import dotenv from 'dotenv';
@@ -10,7 +9,7 @@ const app: Application = express();
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// Basic test route
+// The Main Route
 app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to the API!');
 });

@@ -1,8 +1,6 @@
-// src/routes/auth.ts
 import { Router, Request } from 'express';
-import { register, login } from '../controllers/authController';
+import { register, login, deleteUser } from '../controllers/authController';
 import verifyToken from '../middlewares/auth';
-// import { register } from '../controllers/authController';
 
 interface AuthRequest extends Request {
   user?: any;
@@ -15,9 +13,12 @@ router.post('/register', register);
 // Login route
 router.post('/login', login);
 
+// Protected route
 router.get('/protected', verifyToken, (req: AuthRequest, res) => {
   res.json({ message: 'This is a protected route', user: req.user });
 });
-// Protected route example
+
+// Delete user route (protected)
+router.delete('/delete/:id', verifyToken, deleteUser);
 
 export default router;
